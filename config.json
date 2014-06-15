@@ -1,0 +1,11 @@
+﻿{
+   "name": "tweetie-pi",
+   "port": 3030,
+   "debug": true,
+   "directories": {
+      "static": "/public",
+      "images": "/public/images",
+      "templates": "/public/templates"
+   },
+   "twitterHandles": ["*", "tforster", "wilw","torontotbwa"]
+}
