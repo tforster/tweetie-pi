@@ -7,5 +7,7 @@
       "images": "/public/images",
       "templates": "/public/templates"
    },
-   "twitterHandles": ["*", "tforster", "wilw","torontotbwa"]
+   "twitterHandles": ["*", "tforster", "wilw","torontotbwa"],
+   "serialPort": "com5",
+   "serialPortx": "/dev/ttyACM0"
 }

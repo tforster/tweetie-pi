@@ -1,48 +1,75 @@
 ﻿var path = require("path"), basePath = path.dirname(require.main.filename);
 var twitter = require("ntwitter");
+var serialPort = require("serialport");
 
 var tweetiePi = function () {
    var self = this;
    this.twitter = {};
 
+   this.speak = function (phrase) {
+      if (self.speak.serialPort) {
+         self.speak.serialPort.write("S" + phrase + "\n");
+      }
+      console.log(phrase);
+   };
+
    this.init = function (options) {
       self.options = options;
       self.twitter = new twitter(self.options.twitterCredentials);
 
+      // open the serial port if we can
+      if (isPortAvailable(options.serialPort)) {
+         self.speak.serialPort = new serialPort.SerialPort(options.serialPort, {
+            baudrate: 9600
+         });
+      }
+      else {
+         console.error(options.serialPort + " was not found.");
+      }
+
       self.twitter.stream("user", { with: "following" }, function (stream) {
+         console.log("listening to the Twitter stream...");
          stream.on("data", function (data) {
             if (data.friends) {
                for (var i = 0, len = data.friends.length; i < len; i++) {
-                  // Outputs an array of ids of users this account is following
-                  console.log(data.friends[i]);
+                  //console.log(data.friends[i]);
                }
             }
             else {
+               // Check for filtered followers
                for (var i = 0, len = self.options.twitterHandles.length; i < len; i++) {
                   if (data.user.name === self.options.twitterHandles[0] || self.options.twitterHandles[i] === "*") {
-                     //console.log("createedAt:", data.created_at, "by:", data.user.name, "text:", data.text, "place:", data.place);
                      console.log(data);
                      var tweet = writtenToSpoken(data);
-
-                     console.log("user:", tweet.user);
-                     console.log(" action:", tweet.action);
-                     console.log(" text:", tweet.text);
-                     console.log(" from:", tweet.from);
-                     console.log(" reply:", tweet.reply);
-                     console.log("");
+                     self.speak(tweet.user + tweet.action + tweet.text);
                   }
                }
             }
          });
+
          stream.on("end", function (response) {
             // Handle a disconnection
          });
+
          stream.on("destroy", function (response) {
             // Handle a "silent" disconnection from Twitter, no end/error event fired
          });
-         // Disconnect stream after five seconds
-         //setTimeout(stream.destroy, 5000);
       });
+   }
+
+   var isPortAvailable = function (port) {
+      var portExists = false;
+      serialPort.list(function (err, ports) {
+         ports.forEach(function (port) {
+            if (port.comName == port) {
+               portExists = true;
+            }
+            console.log(port.comName);
+            console.log(port.pnpId);
+            console.log(port.manufacturer);
+         });
+      });
+      return portExists;
    }
 
    var writtenToSpoken = function(tweetObject) {
@@ -59,7 +86,7 @@ var tweetiePi = function () {
          action = " favourited ";
       }
 
-      if (tweetObject.text.indexOf("RT" > -1)) {
+      if (tweetObject.text.indexOf("RT ") > -1) {
          action = " retweeted ";
          tweetObject.text = tweetObject.text.replace(/RT/g, "");
       }
@@ -87,9 +114,7 @@ var tweetiePi = function () {
          "from": from,
          "reply": reply
       }
-   }
-
-  
+   }  
 }
 
 module.exports = new tweetiePi();
