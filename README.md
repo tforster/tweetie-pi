@@ -1,6 +1,6 @@
 # tweetie-pi
 
-Is a simple NodeJS app that uses the Twitter Stream API and the [Emic 2 Text-to-Speech Module](http://www.parallax.com/product/30016) to read tweets out loud.
+Is a simple NodeJS app that uses the Twitter Stream API and the [Emic 2 Text-to-Speech Module](http://www.parallax.com/product/30016) to read tweets out loud. See a really short demo on YouTube: [http://www.youtube.com/watch?v=wUrey-f32_Q](https://www.youtube.com/watch?v=wUrey-f32_Q)
 
 This first version is mostly a proof of concept. It can/will/does read all tweets associated with the user specified in config.secure.json:twitterCredentails. The first version also includes a few basic transformations of the original tweet to sound more colloquial:
 
@@ -45,3 +45,7 @@ This file is not included in the repo since it contains confidential oAuth keys 
 - Emic SP- to Amp R-
 - Emic SP+ to Amp R+
 - Amp right speaker out to speaker (ignore if you're just using headphones)
+
+# The Finished Project
+
+![](https://raw.githubusercontent.com/tforster/tweetie-pi/master/docs/tweetie-pi-w800-h600.jpg)
