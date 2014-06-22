@@ -35,10 +35,12 @@
     <Content Include=".gitignore" />
     <Content Include="config.json" />
     <Content Include="config.secure.json" />
+    <Content Include="docs\tweetie-pi-w800-h600.jpg" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="docs\" />
     <Folder Include="modules\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
